@@ -2,14 +2,13 @@
  
 # Bubbly (WIP)
 
+ <img src="https://user-images.githubusercontent.com/59060246/219005943-7ae41569-6a29-4585-8dfd-f8016dcf8fd4.svg" width="270" alt="bubbly logo">
  
-![Bubbly logo](https://user-images.githubusercontent.com/59060246/219005943-7ae41569-6a29-4585-8dfd-f8016dcf8fd4.svg)
-
 </div>
 
 ## About 
 
-- Bubbly is a widget that lets you create on screen chat_bubble like widgets based on the keystrokes you type on the keyboard. It uses xinput to fetch the keys and puts them into widgets made by eww.
+- Bubbly lets you create on-screen chat_bubble like widgets based on the keystrokes you type on the keyboard. It uses xinput to fetch the keys and puts them into an eww widget.
 
 ## Demo 
 
