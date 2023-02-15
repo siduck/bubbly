@@ -1,0 +1,12 @@
+(defpoll bubbleTxt :interval "0s" "./scripts/bubbles.sh" )
+
+(defwidget chats []
+  (literal :content bubbleTxt))
+
+;final eww window
+(defwindow bubbly
+           :geometry (geometry :x "5%"
+                               :y "-10%"
+                               :anchor "bottom left")
+           :wm-ignore true
+(chats))
