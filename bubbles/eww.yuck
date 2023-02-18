@@ -1,4 +1,4 @@
-(defpoll bubbleTxt :interval "0s" "./scripts/bubbles.sh" )
+defpoll bubbleTxt :interval "0s" "./scripts/bubbles.sh" )
 
 (defwidget chats []
   (literal :content bubbleTxt))

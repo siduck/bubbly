@@ -1,11 +1,9 @@
 #!/bin/dash
 
-rm -f /tmp/xkb* /tmp/bubble_count
-eww -c ./eww open bubbly &
-echo "export bubble_count=1" >/tmp/bubble_count
+basedir="$HOME/.local/share/bubbly"
 
 # variables
-keycodes_list=$(awk '$1 == "keycode" {print $2,$4}' ./keycodes)
+keycodes_list=$(awk '$1 == "keycode" {print $2,$4}' "$basedir/keycodes")
 filename="/tmp/xkb1"
 bubble_count=1
 
@@ -22,8 +20,7 @@ parse_keys() {
 	Return)
 		if [ -s "$filename" ] && [ "$(wc -L <"$filename")" -gt 1 ]; then
 			if [ "$bubble_count" -eq 3 ]; then
-				mv /tmp/xkb2 /tmp/xkb1
-				mv /tmp/xkb3 /tmp/xkb2
+				mv /tmp/xkb2 /tmp/xkb1 && mv /tmp/xkb3 /tmp/xkb2
 				echo "export bubble_count=3" >/tmp/bubble_count
 			else
 				bubble_count=$((bubble_count + 1))
@@ -46,11 +43,12 @@ parse_keys() {
 	fi
 
 	if [ "$previous_key" = "Control_L" ] && [ "$key" = "q" ]; then
-		eww -c ./eww close bubbly
-		killall genkeys.sh
+		eww -c "$basedir/bubbles" reload
+		eww -c "$basedir/bubbles" close bubbly 
+		exit 1
 	fi
 
-  # add letters only to the file
+	# add letters only to the file
 	if [ ${#key} -eq 1 ]; then
 		echo -n "$key" >>"$filename"
 	fi
