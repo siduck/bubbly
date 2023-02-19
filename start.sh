@@ -7,9 +7,9 @@ chat() {
 	rm -f /tmp/xkb* /tmp/bubble_count
 	echo "export bubble_count=1" >/tmp/bubble_count
 
-	eww -c "$basedir/bubbles" open bubbly
+	eww -c "$basedir/bubbles" open bubbly &
 
-	"$basedir/bubbles/scripts/getkeys.sh"
+	"$basedir/bubbles/scripts/getkeys.sh" &
 }
 
 keystrokes() {

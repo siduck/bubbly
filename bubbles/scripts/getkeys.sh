@@ -1,6 +1,7 @@
 #!/bin/dash
 
 basedir="$HOME/.local/share/bubbly"
+. "$basedir/device_name"
 
 # variables
 keycodes_list=$(awk '$1 == "keycode" {print $2,$4}' "$basedir/keycodes")
@@ -44,7 +45,7 @@ parse_keys() {
 
 	if [ "$previous_key" = "Control_L" ] && [ "$key" = "q" ]; then
 		eww -c "$basedir/bubbles" reload
-		eww -c "$basedir/bubbles" close bubbly 
+		eww -c "$basedir/bubbles" close bubbly
 		exit 1
 	fi
 
@@ -56,4 +57,4 @@ parse_keys() {
 	previous_key=$key
 }
 
-xinput test "12" | while parse_keys; do :; done
+xinput test "$device" | while parse_keys; do :; done

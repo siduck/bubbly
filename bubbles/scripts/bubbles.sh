@@ -5,7 +5,7 @@
 result=""
 
 # generate list of chat bubbles
-for i in $(seq 0 "$bubble_count"); do
+for i in $(seq 1 "$bubble_count"); do
 	filename="/tmp/xkb$i"
 	bytecount=$(wc -L <"$filename")
 
