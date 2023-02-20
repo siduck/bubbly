@@ -43,13 +43,14 @@ parse_keys() {
 
 		key_widgets_list=""
 		recent_words=$(echo "$keys" | rev | cut -d' ' -f-3 | rev) # get last 3 only
+		words_len=$(echo "$recent_words" | wc -w)
 		index=0
 
 		for word in $recent_words; do
 			css=""
 			index=$((index + 1))
 
-			if [ $index -eq 3 ]; then
+			if [ $index -eq "$words_len" ]; then
 				css="border: 2px solid #e06c75; color: #e06c75;"
 			fi
 
