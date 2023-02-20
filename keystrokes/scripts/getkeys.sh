@@ -22,6 +22,7 @@ parse_keys() {
 	minus) key="-" ;; BackSpace) key="" ;; Escape) key="Esc" ;;
 	bracketleft) key="[" ;; bracketright) key="]" ;; equal) key="=" ;;
 	Control_L | Control_RL) key="Ctrl" ;; apostrophe) key='"' ;;
+	semicolon) key=";" ;;
 	esac
 
 	if [ "$previous_key" = "Shift_L" ]; then
@@ -58,7 +59,7 @@ parse_keys() {
 		done
 
 		result="(box :spacing 10 :class 'keybox' :space-evenly false $key_widgets_list )"
-		eww -c "$basedir/keystrokes" update keynow="$result"
+		eww -c "$basedir/keystrokes" update keys="$result"
 
 		timeout=$(date '+%M%S')
 		recent_words=""
@@ -75,12 +76,12 @@ check_keypress_timeout() {
 		timenow=$(date '+%M%S')
 		time_diff=$((timenow - timeout))
 
-		if [ "$time_diff" -gt 2 ]; then
-			eww -c "$basedir/keystrokes" update keynow="$result"
+		if [ "$time_diff" -gt 3 ]; then
+			eww -c "$basedir/keystrokes" update keys=""
 			echo -n "" >$keys_file
 		fi
 
-		sleep 2
+		sleep 1
 	done
 }
 

@@ -1,21 +1,7 @@
-(defvar toggled true)
-(defvar keynow "")
+(defvar keys "")
 
-(defwidget keys [] 
-      (literal :content keynow )
-)
-
-(defwidget buttons []
-  (box :orientation 'v' :class 'keystrokes' :space-evenly false
-  
-  ; toggle btn
-  (button  :halign 'center' :class 'toggler'  :tooltip 'stop & hide'
-           :onclick "eww -c $HOME/.local/share/bubbly/keystrokes update toggled=${!toggled}" {toggled? '' : '' })
-
-  ; revealer with content
-  (revealer :reveal toggled :transition "crossfade" :duration ".5s" 
-  (keys))
-  )
+(defwidget key_list []
+  (literal :content keys )
 )
 
 ;final eww window
@@ -24,4 +10,4 @@
                                :y "10%"
                                :anchor "top right")
            :wm-ignore true
-(buttons))
+(key_list))
