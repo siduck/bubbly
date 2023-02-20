@@ -75,7 +75,7 @@ check_keypress_timeout() {
 		timenow=$(date '+%M%S')
 		time_diff=$((timenow - timeout))
 
-		if [ "$time_diff" -gt 3 ]; then
+		if [ "$time_diff" -gt 2 ]; then
 			eww -c "$basedir/keystrokes" update keynow="$result"
 			echo -n "" >$keys_file
 		fi

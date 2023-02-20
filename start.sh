@@ -13,6 +13,7 @@ chat() {
 }
 
 keystrokes() {
+	rm -f /tmp/bubbly_keys
 	eww -c "$basedir/keystrokes" open keystrokes
 	"$basedir/keystrokes/scripts/getkeys.sh"
 }
