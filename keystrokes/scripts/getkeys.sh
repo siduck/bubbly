@@ -6,7 +6,6 @@ basedir="$HOME/.local/share/bubbly"
 # variables
 keycodes_list=$(awk '$1 == "keycode" {print $2,$4}' "$basedir/keycodes")
 previous_key=''
-timeout=$(date '+%M%S')
 
 keys_file=/tmp/bubbly_keys
 
@@ -62,7 +61,7 @@ parse_keys() {
 		result="(box :spacing 10 :class 'keybox' :space-evenly false $key_widgets_list )"
 		eww -c "$basedir/keystrokes" update keys="$result"
 
-		timeout=$(date '+%M%S')
+		echo -n "$(date '+%M%S')" >/tmp/bubbly_chat_timeout
 		recent_words=""
 	fi
 
@@ -74,15 +73,16 @@ xinput test "$device" | while parse_keys; do :; done &
 # if the user doesnt type for 3 seconds then hide eww widget
 check_keypress_timeout() {
 	while true; do
+		timeout=$(cat /tmp/bubbly_chat_timeout)
 		timenow=$(date '+%M%S')
 		time_diff=$((timenow - timeout))
 
-		if [ "$time_diff" -gt 3 ]; then
+		if [ "$time_diff" -ge 0 ]; then
 			eww -c "$basedir/keystrokes" update keys=""
 			echo -n "" >$keys_file
 		fi
 
-		sleep 1
+		sleep 2
 	done
 }
 
