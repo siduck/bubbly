@@ -4,31 +4,18 @@ window {
   background: transparent;
 }
 
-.keystrokes {
-  // background: $bg;
-  padding: 1rem;
-  color: $fg;
-  // font-size: 1.3rem;
-  border-radius: 1rem;
-}
-
-.keystrokes button {
-  border-radius: 10rem;
-}
-
 .keybox {
-  margin-top: 1rem;
+  color: $fg;
+  font-size: 1.3rem;
+  border-radius: 1rem;
+  padding: 1rem;
+  margin: 1rem;
 }
 
 .keybox .label {
- border: 2px solid #6f737b;
- color: #6f737b;
- border-radius: .5rem;
- padding: 0.5rem 0.8rem;
-}
-
-
-.toggler {
-  background: #61afef;
-  color: $bg;
+  background: $bg;
+  border-radius: 0.9rem;
+  padding: 0.6rem 1.2rem;
+  // font-weight: bold;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }

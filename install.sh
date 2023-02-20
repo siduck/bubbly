@@ -1,10 +1,12 @@
 #!/bin/sh
 
+# copy default .bubblyrc config
+cp -r ./keystrokes/config/.bubblyrc "$HOME/.config"
+
 install_dir=$(pwd)
 mv "$install_dir" "$HOME/.local/share"
 
 # uses xinput to get active keyboard ( device ID )
-
 echo "press any key to get device name"
 
 get_device() {

@@ -1,7 +1,11 @@
 #!/bin/dash
 
 basedir="$HOME/.local/share/bubbly"
+
 . "$basedir/device_name"
+. "$HOME/.config/.bubblyrc"
+
+gradient=$("$basedir/keystrokes/scripts/gen_gradient.sh" "$keystrokes_bg")
 
 # variables
 keycodes_list=$(awk '$1 == "keycode" {print $2,$4}' "$basedir/keycodes")
@@ -41,7 +45,7 @@ parse_keys() {
 		keys=$(cat $keys_file)
 
 		key_widgets_list=""
-		recent_words=$(echo "$keys" | rev | cut -d' ' -f-3 | rev) # get last 3 only
+		recent_words=$(echo "$keys" | rev | cut -d' ' -f-"$keystrokes_limit" | rev) # get last 3 only
 		words_len=$(echo "$recent_words" | wc -w)
 		index=0
 
@@ -50,7 +54,7 @@ parse_keys() {
 			index=$((index + 1))
 
 			if [ $index -eq "$words_len" ]; then
-				css="border: 2px solid #e06c75; color: #e06c75;"
+				css="color: #EF8891; background: #282c34"
 			fi
 
 			# active_style=""
@@ -58,11 +62,10 @@ parse_keys() {
 			key_widgets_list=" $key_widgets_list $key_widget "
 		done
 
-		result="(box :spacing 10 :class 'keybox' :space-evenly false $key_widgets_list )"
+		result="(box :spacing 10 :style '$gradient' :class 'keybox' :space-evenly false $key_widgets_list )"
 		eww -c "$basedir/keystrokes" update keys="$result"
 
-		echo -n "$(date '+%M%S')" >/tmp/bubbly_chat_timeout
-		recent_words=""
+		echo -n "$(date '+%s')" >/tmp/bubbly_chat_timeout
 	fi
 
 	previous_key=$key
@@ -74,15 +77,16 @@ xinput test "$device" | while parse_keys; do :; done &
 check_keypress_timeout() {
 	while true; do
 		timeout=$(cat /tmp/bubbly_chat_timeout)
-		timenow=$(date '+%M%S')
+		timenow=$(date '+%s')
 		time_diff=$((timenow - timeout))
 
-		if [ "$time_diff" -ge 0 ]; then
-			eww -c "$basedir/keystrokes" update keys=""
+		if [ "$time_diff" -ge 1 ]; then
+			eww -c "$basedir/keystrokes" update keys=" "
+			eww -c "$basedir/keystrokes" reload
 			echo -n "" >$keys_file
 		fi
 
-		sleep 2
+		sleep 1
 	done
 }
 
