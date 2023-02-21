@@ -1,0 +1,27 @@
+(defvar mode "")
+
+(defwidget header []
+  (box :class "header" 
+    (label :text "󰘳" :class "icon" )
+    (label :text "Bubbly")
+   (button :class "closeIcon" :onclick "eww -c $HOME/.local/share/bubbly/selector close selector "  "󰅙" )
+  )
+)
+
+(defwidget selector []
+  (box :class "bubbly" :orientation "v" :space-evenly false
+
+    (header)
+
+    (box :class "btnwrapper" :spacing 10
+      (button :style { mode == "Chats"? "background:#2F3454;color:#fff" : "" } :onclick "scripts/switchMode.sh chat" "Chats" )
+      (button  :style { mode == "keystrokes"? "background:#2F3454;color:#fff " : "" } :onclick "scripts/switchMode.sh keystrokes" "Keystrokes")
+    )
+))
+
+;final eww window
+(defwindow selector
+           :monitor 0
+           :geometry (geometry :anchor "center center")
+           :wm-ignore true
+(selector))
