@@ -5,8 +5,7 @@
 )
 
 (defwindow keystrokes
-           :geometry (geometry :x "-10%"
-                               :y "10%"
-                               :anchor "top right")
+           :geometry (geometry :y "-10%"
+                               :anchor "bottom center")
            :wm-ignore true
 (key_list))
