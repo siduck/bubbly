@@ -44,6 +44,12 @@ parse_keys() {
 		echo -n " $key" >>$keys_file
 		keys=$(cat $keys_file)
 
+		# if [ $keys = "Ctrl Esc" ]; then
+		if [ "$keys" = " Ctrl Esc" ]; then
+			eww -c "$basedir/bubbles" close bubbly
+			killall getkeys.sh
+		fi
+
 		key_widgets_list=""
 		recent_words=$(echo "$keys" | rev | cut -d' ' -f-"$keystrokes_limit" | rev) # get last 3 only
 		words_len=$(echo "$recent_words" | wc -w)
@@ -73,7 +79,7 @@ parse_keys() {
 
 xinput test "$device" | while parse_keys; do :; done &
 
-# if the user doesnt type for 3 seconds then hide eww widget
+# if the user doesnt type for 2 seconds then hide eww widget
 check_keypress_timeout() {
 	while true; do
 		timeout=$(cat /tmp/bubbly_chat_timeout)
