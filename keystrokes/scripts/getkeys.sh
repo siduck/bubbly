@@ -47,6 +47,7 @@ parse_keys() {
 		# if [ $keys = "Ctrl Esc" ]; then
 		if [ "$keys" = " Ctrl Esc" ]; then
 			eww -c "$basedir/bubbles" close bubbly
+			eww -c "$basedir/keystrokes" close keystrokes
 			killall getkeys.sh
 		fi
 
