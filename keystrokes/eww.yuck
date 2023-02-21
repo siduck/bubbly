@@ -4,7 +4,6 @@
   (literal :content keys )
 )
 
-;final eww window
 (defwindow keystrokes
            :geometry (geometry :x "-10%"
                                :y "10%"

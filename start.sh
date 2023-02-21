@@ -19,7 +19,7 @@ keystrokes() {
 }
 
 if [ $# -eq 0 ]; then
-	echo "available arguments : chats and keystrokes"
+ 	eww -c "$basedir/selector" open selector
 fi
 
 "$@"

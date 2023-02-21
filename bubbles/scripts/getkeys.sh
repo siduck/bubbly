@@ -43,10 +43,10 @@ parse_keys() {
 		esac
 	fi
 
-	if [ "$previous_key" = "Control_L" ] && [ "$key" = "q" ]; then
+	if [ "$previous_key" = "Control_L" ] && [ "$key" = "Escape" ]; then
 		eww -c "$basedir/bubbles" reload
 		eww -c "$basedir/bubbles" close bubbly
-		exit 1
+		killall getkeys.sh
 	fi
 
 	# add letters only to the file
