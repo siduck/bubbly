@@ -1,10 +1,9 @@
 #!/bin/sh
 
-# copy default .bubblyrc config
-cp -r ./config/bubbly "$HOME/.config/"
+cd "$HOME/.local/share"
+git clone https://github.com/siduck/bubbly --depth 1
 
-install_dir=$(pwd)
-mv "$install_dir" "$HOME/.local/share"
+cp -r bubbly/config "$HOME/.config/bubbly"
 
 # create desktop file
 echo "[Desktop Entry]
