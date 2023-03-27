@@ -37,7 +37,6 @@ full video : https://www.youtube.com/watch?v=JxG1buUmJ2U
 
 ## Install
 
-
 ```zsh
 curl https://raw.githubusercontent.com/siduck/bubbly/buttons/install.sh | sh
 ```
