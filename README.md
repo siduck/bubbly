@@ -11,8 +11,8 @@
 - Bubbly lets you create on-screen chat_bubble like widgets based on the keystrokes you type on the keyboard. It uses xinput to fetch the keys and puts them into an eww widget.
 
 - It has 2 modes :
-  - **chat** - Creates onscreen chat likes widgets based on the keys you type.
-  - **keystrokes** - Creates onscreen widgets to show the typed keys, something like screenkey, keycaster etc.
+  - **chat** - Creates onscreen chat like widgets based on the keys you type in the form of sentences.
+  - **keystrokes** - Creates onscreen widgets to show keystrokes, something like screenkey, keycaster etc.
 
 ## Demo 
 
