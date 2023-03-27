@@ -18,7 +18,7 @@ https://user-images.githubusercontent.com/59060246/219007436-a61f79be-e958-4426-
 
 - [eww](https://github.com/elkowar/eww)
 - xinput
-- dash ( optional )
+- dash  
 
 ## Usage
 
