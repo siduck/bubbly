@@ -45,6 +45,7 @@ parse_keys() {
 	if [ "$previous_key" = "Control_L" ] && [ "$key" = "Escape" ]; then
 		eww -c "$basedir/bubbles" reload
 		eww -c "$basedir/bubbles" close bubbly
+    eww -c "$basedir/selector" update mode=''
 		killall getkeys.sh
 	fi
 
