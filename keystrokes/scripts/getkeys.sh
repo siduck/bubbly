@@ -2,7 +2,6 @@
 
 basedir="$HOME/.local/share/bubbly"
 
-. "$basedir/device_name"
 . "$HOME/.config/.bubblyrc"
 
 gradient=$("$basedir/keystrokes/scripts/gen_gradient.sh" "$keystrokes_bg")
@@ -77,6 +76,8 @@ parse_keys() {
 
 	previous_key=$key
 }
+
+device=$(xinput --list --long | grep XIKeyClass | head -n 1 | grep -E -o '[0-9]+')
 
 xinput test "$device" | while parse_keys; do :; done &
 

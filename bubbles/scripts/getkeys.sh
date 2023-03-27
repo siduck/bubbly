@@ -1,7 +1,6 @@
 #!/bin/dash
 
 basedir="$HOME/.local/share/bubbly"
-. "$basedir/device_name"
 
 # variables
 keycodes_list=$(awk '$1 == "keycode" {print $2,$4}' "$basedir/keycodes")
@@ -56,5 +55,7 @@ parse_keys() {
 
 	previous_key=$key
 }
+
+device=$(xinput --list --long | grep XIKeyClass | head -n 1 | grep -E -o '[0-9]+')
 
 xinput test "$device" | while parse_keys; do :; done
