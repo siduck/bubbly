@@ -2,7 +2,7 @@
 
 basedir="$HOME/.local/share/bubbly"
 
-. "$HOME/.config/.bubblyrc"
+. "$HOME/.config/bubbly/keystrokes"
 
 gradient=$("$basedir/keystrokes/scripts/gen_gradient.sh" "$keystrokes_bg")
 

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # copy default .bubblyrc config
-cp -r ./keystrokes/config/.bubblyrc "$HOME/.config"
+cp -r ./config/bubbly "$HOME/.config/"
 
 install_dir=$(pwd)
 mv "$install_dir" "$HOME/.local/share"
