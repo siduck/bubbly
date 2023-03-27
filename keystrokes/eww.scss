@@ -1,0 +1,22 @@
+@import "./colors.scss";
+
+window {
+  background: transparent;
+}
+
+.keybox {
+  color: $fg;
+  font-size: 1.7rem;
+  border-radius: 1rem;
+  padding: 1rem;
+  margin: 1rem;
+  font-family: Iosevka;
+}
+
+.keybox .label {
+  background: $bg;
+  border-radius: 0.9rem;
+  padding: 0.6rem 1.2rem;
+  // font-weight: bold;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}

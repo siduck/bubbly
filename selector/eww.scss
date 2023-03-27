@@ -1,0 +1,49 @@
+@import "./colors.scss";
+
+.bubbly {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  color: $fg;
+}
+
+.btnwrapper {
+  background: $bg;
+  border-radius: 0 0 0.5rem.5rem;
+  padding: 1rem;
+}
+
+.btnwrapper button {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background: $tint;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  color: $fg;
+}
+
+.btnwrapper button:hover {
+  background: $tint2;
+}
+
+.header {
+  background: $tint;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  padding: 0.7rem 1rem;
+}
+
+.header button {
+  border: none;
+  color: $red;
+  margin-left: 3rem;
+  font-family: JetbrainsMono Nerd Font;
+  font-size: 1.1rem;
+  padding: .1rem .3rem;
+  padding-right: .6rem;
+}
+
+.header button:hover {
+  color: white;
+}
+
+.header .icon {
+  font-family: JetbrainsMono Nerd Font;
+  padding-right: 4rem;
+}

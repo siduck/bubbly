@@ -1,11 +1,9 @@
 #!/bin/dash
 
-rm -f /tmp/xkb* /tmp/bubble_count
-eww -c ./eww open bubbly &
-echo "export bubble_count=1" >/tmp/bubble_count
+basedir="$HOME/.local/share/bubbly"
 
 # variables
-keycodes_list=$(awk '$1 == "keycode" {print $2,$4}' ./keycodes)
+keycodes_list=$(awk '$1 == "keycode" {print $2,$4}' "$basedir/keycodes")
 filename="/tmp/xkb1"
 bubble_count=1
 
@@ -22,8 +20,7 @@ parse_keys() {
 	Return)
 		if [ -s "$filename" ] && [ "$(wc -L <"$filename")" -gt 1 ]; then
 			if [ "$bubble_count" -eq 3 ]; then
-				mv /tmp/xkb2 /tmp/xkb1
-				mv /tmp/xkb3 /tmp/xkb2
+				mv /tmp/xkb2 /tmp/xkb1 && mv /tmp/xkb3 /tmp/xkb2
 				echo "export bubble_count=3" >/tmp/bubble_count
 			else
 				bubble_count=$((bubble_count + 1))
@@ -45,12 +42,14 @@ parse_keys() {
 		esac
 	fi
 
-	if [ "$previous_key" = "Control_L" ] && [ "$key" = "q" ]; then
-		eww -c ./eww close bubbly
-		killall genkeys.sh
+	if [ "$previous_key" = "Control_L" ] && [ "$key" = "Escape" ]; then
+		eww -c "$basedir/bubbles" reload
+		eww -c "$basedir/bubbles" close bubbly
+    eww -c "$basedir/selector" update mode=''
+		killall getkeys.sh
 	fi
 
-  # add letters only to the file
+	# add letters only to the file
 	if [ ${#key} -eq 1 ]; then
 		echo -n "$key" >>"$filename"
 	fi
@@ -58,4 +57,6 @@ parse_keys() {
 	previous_key=$key
 }
 
-xinput test "12" | while parse_keys; do :; done
+device=$(xinput --list --long | grep XIKeyClass | head -n 1 | grep -E -o '[0-9]+')
+
+xinput test "$device" | while parse_keys; do :; done

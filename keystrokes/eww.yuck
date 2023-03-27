@@ -1,0 +1,11 @@
+(defvar keys "")
+
+(defwidget key_list []
+  (literal :content keys )
+)
+
+(defwindow keystrokes
+           :geometry (geometry :y "-10%"
+                               :anchor "bottom center")
+           :wm-ignore true
+(key_list))
