@@ -59,6 +59,7 @@ parse_keys() {
 		    9) key='(' ;;
 		    0) key=')' ;;
 		    /) key='?' ;;
+        underscore) key='_';;
 		    [a-z]) key=$(echo "$key" | tr '[:lower:]' '[:upper:]') ;;
 		esac
 	fi
