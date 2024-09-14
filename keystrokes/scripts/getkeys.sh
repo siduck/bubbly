@@ -9,8 +9,7 @@ gradient=$("$basedir/keystrokes/scripts/gen_gradient.sh" "$keystrokes_bg")
 # variables
 keycodes_list=$(awk '$1 == "keycode" {print $2,$4}' "$basedir/keycodes")
 previous_key=''
-shift_active=0
-caps_lock_active=0
+
 keys_file=/tmp/bubbly_keys
 
 parse_keys() {
@@ -21,46 +20,47 @@ parse_keys() {
 
 	# shorten some key names
 	case $key in
-		comma) key="," ;; 
-		period) key="." ;; 
+		comma) key="," ;;
+		period) key="." ;;
 		slash) key="/" ;;
-		minus) key="-" ;; 
-		BackSpace) key="" ;; 
+		minus) key="-" ;;
+		BackSpace) key="" ;;
 		Escape) key="Esc" ;;
-		bracketleft) key="[" ;; 
-		bracketright) key="]" ;; 
+		bracketleft) key="[" ;;
+		bracketright) key="]" ;;
 		equal) key="=" ;;
-		Control_L | Control_RL) key="Ctrl" ;; 
-		apostrophe) key='"' ;;
-		semicolon) key=";" ;;
+    apostrophe) key="'" ;;
+    semicolon) key=";" ;;
+		Control_L | Control_RL) key="Ctrl" ;;
 	esac
 
-	# Check for Shift and Caps Lock
-	if [ "$key" = "Shift_L" ] || [ "$key" = "Shift_R" ]; then
-		shift_active=1
-	elif [ "$key" = "Caps_Lock" ]; then
-		caps_lock_active=$((1 - caps_lock_active)) # Toggle Caps Lock state
-	elif [ "$key" = "Release" ]; then
-		shift_active=0
-	fi
-
-	# Handle symbols and capitalization
-	if [ "$shift_active" -eq 1 ] || [ "$caps_lock_active" -eq 1 ]; then
+	if [ "$previous_key" = "Shift_L" ] || [ "$previous_key" = "Shift_R" ]; then
+		# handle symbols
 		case $key in
-		    1) key='!' ;; 
-		    2) key='@' ;; 
-		    3) key='#' ;; 
+		    1) key='!' ;;
+		    2) key='@' ;;
+		    3) key='#' ;;
 		    4) key='$' ;;
-		    5) key='%' ;; 
-		    6) key='^' ;; 
-		    7) key='&' ;; 
+		    5) key='%' ;;
+		    6) key='^' ;;
+		    7) key='&' ;;
 		    8) key='*' ;;
-		    9) key='(' ;; 
-		    0) key=')' ;; /) key='?' ;;
-        underscore) key='_';;
-		    [a-z]) key=$(echo "$key" | tr '[:lower:]' '[:upper:]') ;;
+		    9) key='(' ;;
+		    0) key=')' ;;
+		    /) key='?' ;;
+        -) key='_' ;;
+        =) key='+' ;;
+        ,) key='<' ;;
+        '.') key='>' ;;
+        ';') key=':' ;;
+        "'") key='"' ;;
+        '[') key='{' ;;
+        ']') key='}' ;;
+
+        # capitalize
+        [a-z]) key=$(echo "$key" | tr '[:lower:]' '[:upper:]') ;;
 		esac
-	fi
+  fi
 
 	if [ ${#key} -gt 0 ] && [ "$key" != "Shift_R" ] && [ "$key" != "Shift_L" ]; then
 		key=$(echo "$key" | sed 's/_.*//') # rm _txt suffix for some keys like alt_r -> alt etc
@@ -113,7 +113,7 @@ check_keypress_timeout() {
 		timenow=$(date '+%s')
 		time_diff=$((timenow - timeout))
 
-		if [ "$time_diff" -ge 2 ]; then
+		if [ "$time_diff" -ge 1 ]; then
 			eww -c "$basedir/keystrokes" update keys=" "
 			eww -c "$basedir/keystrokes" reload
 			echo -n "" >$keys_file
