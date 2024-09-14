@@ -7,6 +7,7 @@ keycodes_list=$(awk '$1 == "keycode" {print $2,$4}' "$basedir/keycodes")
 filename="/tmp/xkb1"
 bubble_count=1
 shift_active=0
+previous_key=''
 caps_lock_active=0
 
 parse_keys() {
@@ -15,15 +16,7 @@ parse_keys() {
 	key_code=$(echo "$line" | awk -F ' ' '/key press/ {print $NF}')
 	key=$(echo "$keycodes_list" | awk -v keycode="$key_code" '$1 == keycode {print $2}')
 
-	# Check if Shift or Caps Lock is active
-	if [ "$key" = "Shift_L" ] || [ "$key" = "Shift_R" ]; then
-		shift_active=1
-	elif [ "$key" = "Caps_Lock" ]; then
-		caps_lock_active=$((1 - caps_lock_active)) # Toggle Caps Lock state
-	elif [ "$key" = "Release" ]; then
-		shift_active=0
-	fi
-    
+  # shorten some key names
 	case $key in
 		space) key=" " ;; 
 		comma) key="," ;; 
@@ -45,8 +38,20 @@ parse_keys() {
 			;;
 	esac
 	
+	# Check if Shift or Caps Lock is active
+	if [ "$key" = "Shift_L" ] || [ "$key" = "Shift_R" ]; then
+		shift_active=1
+	elif [ "$key" = "Caps_Lock" ]; then
+		caps_lock_active=$((1 - caps_lock_active)) # Toggle Caps Lock state
+	elif [ "$key" = "KeyRelease" ]; then
+    if [ "$previous_key" = "Shift_L" ] || [ "$previous_key" = "Shift_R" ]; then
+        shift_active=0
+    fi
+    $previous_key='' # clear previous key after release
+	fi
+
 	# Adjust for Shift and Caps Lock
-	if [ "$shift_active" -eq 1 ] || [ "$caps_lock_active" -eq 1 ]; then
+	if [ "$shift_active" -eq 1 ]; then
 		case $key in
 		    1) key='!' ;;
 		    2) key='@' ;;
@@ -58,11 +63,27 @@ parse_keys() {
 		    8) key='*' ;;
 		    9) key='(' ;;
 		    0) key=')' ;;
-		    /) key='?' ;;
-        underscore) key='_';;
-		    [a-z]) key=$(echo "$key" | tr '[:lower:]' '[:upper:]') ;;
+        /) key='?' ;;
 		esac
 	fi
+
+  # Handle caps lock for letter casing
+  if [ "$caps_lock_active" -eq 1 ]; then
+    case $key in
+      [a-z]) key=$(echo "$key" | tr '[:lower:]' '[:upper:]') ;;
+    esac
+  else
+    case $key in
+      [A-Z]) key=$(echo "$key" | tr '[:upper:]' '[:lower:]') ;;
+    esac
+  fi
+
+  # If Shift isn't active, convert uppercase to lowercase
+  if [ "$shift_active" -eq 0 ] && [ "$caps_lock_active" -eq 0 ]; then
+    case $key in
+      [A-Z]) key=$(echo "$key" | tr '[:upper:]' '[:lower:]') ;;
+    esac
+  fi
 
 	if [ "$previous_key" = "Control_L" ] && [ "$key" = "Escape" ]; then
 		eww -c "$basedir/bubbles" reload
