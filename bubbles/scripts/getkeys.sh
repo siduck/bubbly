@@ -16,14 +16,17 @@ parse_keys() {
 	key_code=$(echo "$line" | awk -F ' ' '/key press/ {print $NF}')
 	key=$(echo "$keycodes_list" | awk -v keycode="$key_code" '$1 == keycode {print $2}')
 
+  # Log the key pressed
+  echo "Key pressed: $key" >> /tmp/key_log.txt
+
   # shorten some key names
 	case $key in
 		space) key=" " ;; 
 		comma) key="," ;; 
 		period) key="." ;; 
+    backslash) key="\\" ;;
     slash) key="/" ;;
 		minus) key="-" ;; 
-    apostrophe) key="'" ;;
     equal) key="=" ;;
     grave) key="\`" ;;
     apostrophe) key="\'" ;;
@@ -73,8 +76,8 @@ parse_keys() {
         -) key='_' ;;
         "'") key='"' ;;
         =) key='+' ;;
-        ;) key=':' ;;
-        [) key='{' ;;
+        ';') key=':' ;;
+        '[') key='{' ;;
         ]) key='}' ;;
         backslash) key='|' ;;
         ,) key='<' ;;
