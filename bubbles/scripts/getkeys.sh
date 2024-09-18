@@ -21,8 +21,15 @@ parse_keys() {
 		space) key=" " ;; 
 		comma) key="," ;; 
 		period) key="." ;; 
-		slash) key="/" ;;
+    slash) key="/" ;;
 		minus) key="-" ;; 
+    apostrophe) key="'" ;;
+    equal) key="=" ;;
+    grave) key="\`" ;;
+    apostrophe) key="\'" ;;
+    semicolon) key=";" ;;
+    bracketleft) key="[" ;;
+    bracketright) key="]" ;;
 		BackSpace) truncate -s -1 "$filename" ;;
 		Return)
 			if [ -s "$filename" ] && [ "$(wc -L <"$filename")" -gt 1 ]; then
@@ -50,8 +57,7 @@ parse_keys() {
     $previous_key='' # clear previous key after release
 	fi
 
-	# Adjust for Shift and Caps Lock
-	if [ "$shift_active" -eq 1 ]; then
+	if [ "$shift_active" -eq 1 ] && [ "$previous_key" = "Shift_L" ] || [ "$previous_key" = "Shift_R" ]; then
 		case $key in
 		    1) key='!' ;;
 		    2) key='@' ;;
@@ -64,6 +70,16 @@ parse_keys() {
 		    9) key='(' ;;
 		    0) key=')' ;;
         /) key='?' ;;
+        -) key='_' ;;
+        "'") key='"' ;;
+        =) key='+' ;;
+        ;) key=':' ;;
+        [) key='{' ;;
+        ]) key='}' ;;
+        backslash) key='|' ;;
+        ,) key='<' ;;
+        .) key='>' ;;
+        \`) key="~" ;;
 		esac
 	fi
 
