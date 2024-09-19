@@ -17,19 +17,18 @@ parse_keys() {
 	key=$(echo "$keycodes_list" | awk -v keycode="$key_code" '$1 == keycode {print $2}')
 
   # Log the key pressed
-  echo "Key pressed: $key" >> /tmp/key_log.txt
+  # echo "Key pressed: $key" >> /tmp/key_log.txt
 
   # shorten some key names
 	case $key in
 		space) key=" " ;; 
 		comma) key="," ;; 
 		period) key="." ;; 
-    backslash) key="\\" ;;
     slash) key="/" ;;
 		minus) key="-" ;; 
     equal) key="=" ;;
     grave) key="\`" ;;
-    apostrophe) key="\'" ;;
+    apostrophe) key="\\'" ;;
     semicolon) key=";" ;;
     bracketleft) key="[" ;;
     bracketright) key="]" ;;
@@ -74,7 +73,7 @@ parse_keys() {
 		    0) key=')' ;;
         /) key='?' ;;
         -) key='_' ;;
-        "'") key='"' ;;
+        "\\'") key='"' ;;
         =) key='+' ;;
         ';') key=':' ;;
         '[') key='{' ;;
@@ -111,10 +110,11 @@ parse_keys() {
 		killall getkeys.sh
 	fi
 
-	# add letters only to the file
-	if [ ${#key} -eq 1 ]; then
-		echo -n "$key" >>"$filename"
-	fi
+
+  # Add letters only to the file
+  if [ ${#key} -eq 1 ]; then
+    echo -n "$key" >>"$filename"
+  fi
 
 	previous_key=$key
 }
