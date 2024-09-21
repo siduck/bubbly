@@ -22,6 +22,7 @@ parse_keys() {
 	case $key in
 		comma) key="," ;;
 		period) key="." ;;
+    backslash) key="\\" ;;
 		slash) key="/" ;;
 		minus) key="-" ;;
 		BackSpace) key="" ;;
@@ -29,7 +30,7 @@ parse_keys() {
 		bracketleft) key="[" ;;
 		bracketright) key="]" ;;
 		equal) key="=" ;;
-    apostrophe) key="'" ;;
+    apostrophe) key="\'" ;;
     semicolon) key=";" ;;
 		Control_L | Control_RL) key="Ctrl" ;;
 	esac
@@ -53,7 +54,7 @@ parse_keys() {
         ,) key='<' ;;
         '.') key='>' ;;
         ';') key=':' ;;
-        "'") key='"' ;;
+        "\'") key='"' ;;
         '[') key='{' ;;
         ']') key='}' ;;
 
