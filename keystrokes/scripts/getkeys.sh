@@ -20,23 +20,48 @@ parse_keys() {
 
 	# shorten some key names
 	case $key in
-	comma) key="," ;; period) key="." ;; slash) key="/" ;;
-	minus) key="-" ;; BackSpace) key="" ;; Escape) key="Esc" ;;
-	bracketleft) key="[" ;; bracketright) key="]" ;; equal) key="=" ;;
-	Control_L | Control_RL) key="Ctrl" ;; apostrophe) key='"' ;;
-	semicolon) key=";" ;;
+		comma) key="," ;;
+		period) key="." ;;
+    backslash) key="\\" ;;
+		slash) key="/" ;;
+		minus) key="-" ;;
+		BackSpace) key="" ;;
+		Escape) key="Esc" ;;
+		bracketleft) key="[" ;;
+		bracketright) key="]" ;;
+		equal) key="=" ;;
+    apostrophe) key="\'" ;;
+    semicolon) key=";" ;;
+		Control_L | Control_RL) key="Ctrl" ;;
 	esac
 
-	if [ "$previous_key" = "Shift_L" ]; then
+	if [ "$previous_key" = "Shift_L" ] || [ "$previous_key" = "Shift_R" ]; then
 		# handle symbols
 		case $key in
-		1) key='!' ;; 2) key='@' ;; 3) key='#' ;; 4) key='$' ;;
-		5) key='%' ;; 7) key='&' ;; 9) key='(' ;; 0) key=')' ;; /) key='?' ;;
+		    1) key='!' ;;
+		    2) key='@' ;;
+		    3) key='#' ;;
+		    4) key='$' ;;
+		    5) key='%' ;;
+		    6) key='^' ;;
+		    7) key='&' ;;
+		    8) key='*' ;;
+		    9) key='(' ;;
+		    0) key=')' ;;
+		    /) key='?' ;;
+        -) key='_' ;;
+        =) key='+' ;;
+        ,) key='<' ;;
+        '.') key='>' ;;
+        ';') key=':' ;;
+        "\'") key='"' ;;
+        '[') key='{' ;;
+        ']') key='}' ;;
 
-		# capitalize
-		[a-z]) key=$(echo "$key" | tr '[:lower:]' '[:upper:]') ;;
+        # capitalize
+        [a-z]) key=$(echo "$key" | tr '[:lower:]' '[:upper:]') ;;
 		esac
-	fi
+  fi
 
 	if [ ${#key} -gt 0 ] && [ "$key" != "Shift_R" ] && [ "$key" != "Shift_L" ]; then
 		key=$(echo "$key" | sed 's/_.*//') # rm _txt suffix for some keys like alt_r -> alt etc

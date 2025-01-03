@@ -6,6 +6,9 @@ basedir="$HOME/.local/share/bubbly"
 keycodes_list=$(awk '$1 == "keycode" {print $2,$4}' "$basedir/keycodes")
 filename="/tmp/xkb1"
 bubble_count=1
+shift_active=0
+previous_key=''
+caps_lock_active=0
 
 parse_keys() {
 	read -r line
@@ -13,34 +16,92 @@ parse_keys() {
 	key_code=$(echo "$line" | awk -F ' ' '/key press/ {print $NF}')
 	key=$(echo "$keycodes_list" | awk -v keycode="$key_code" '$1 == keycode {print $2}')
 
+  # Log the key pressed
+  # echo "Key pressed: $key" >> /tmp/key_log.txt
+
+  # shorten some key names
 	case $key in
-	space) key=" " ;; comma) key="," ;; period) key="." ;; slash) key="/" ;;
-	minus) key="-" ;; BackSpace) truncate -s -1 "$filename" ;;
-
-	Return)
-		if [ -s "$filename" ] && [ "$(wc -L <"$filename")" -gt 1 ]; then
-			if [ "$bubble_count" -eq 3 ]; then
-				mv /tmp/xkb2 /tmp/xkb1 && mv /tmp/xkb3 /tmp/xkb2
-				echo "export bubble_count=3" >/tmp/bubble_count
-			else
-				bubble_count=$((bubble_count + 1))
-				echo "export bubble_count=$bubble_count" >/tmp/bubble_count
+		space) key=" " ;; 
+		comma) key="," ;; 
+		period) key="." ;; 
+    slash) key="/" ;;
+		minus) key="-" ;; 
+    equal) key="=" ;;
+    grave) key="\`" ;;
+    apostrophe) key="\\'" ;;
+    semicolon) key=";" ;;
+    bracketleft) key="[" ;;
+    bracketright) key="]" ;;
+		BackSpace) truncate -s -1 "$filename" ;;
+		Return)
+			if [ -s "$filename" ] && [ "$(wc -L <"$filename")" -gt 1 ]; then
+				if [ "$bubble_count" -eq 3 ]; then
+					mv /tmp/xkb2 /tmp/xkb1 && mv /tmp/xkb3 /tmp/xkb2
+					echo "export bubble_count=3" >/tmp/bubble_count
+				else
+					bubble_count=$((bubble_count + 1))
+					echo "export bubble_count=$bubble_count" >/tmp/bubble_count
+				fi
+				filename="/tmp/xkb$bubble_count"
 			fi
-			filename="/tmp/xkb$bubble_count"
-		fi
-		;;
+			;;
 	esac
+	
+	# Check if Shift or Caps Lock is active
+	if [ "$key" = "Shift_L" ] || [ "$key" = "Shift_R" ]; then
+		shift_active=1
+	elif [ "$key" = "Caps_Lock" ]; then
+		caps_lock_active=$((1 - caps_lock_active)) # Toggle Caps Lock state
+	elif [ "$key" = "KeyRelease" ]; then
+    if [ "$previous_key" = "Shift_L" ] || [ "$previous_key" = "Shift_R" ]; then
+        shift_active=0
+    fi
+    $previous_key='' # clear previous key after release
+	fi
 
-	if [ "$previous_key" = "Shift_L" ]; then
+	if [ "$shift_active" -eq 1 ] && [ "$previous_key" = "Shift_L" ] || [ "$previous_key" = "Shift_R" ]; then
 		case $key in
-		# handle symbols by numbers
-		1) key='!' ;; 2) key='@' ;; 3) key='#' ;; 4) key='$' ;;
-		5) key='%' ;; 7) key='&' ;; 9) key='(' ;; 0) key=')' ;; /) key='?' ;;
-
-		# capitalize
-		[a-z]) key=$(echo "$key" | tr '[:lower:]' '[:upper:]') ;;
+		    1) key='!' ;;
+		    2) key='@' ;;
+		    3) key='#' ;;
+		    4) key='$' ;;
+		    5) key='%' ;;
+		    6) key='^' ;;
+		    7) key='&' ;;
+		    8) key='*' ;;
+		    9) key='(' ;;
+		    0) key=')' ;;
+        /) key='?' ;;
+        -) key='_' ;;
+        "\\'") key='"' ;;
+        =) key='+' ;;
+        ';') key=':' ;;
+        '[') key='{' ;;
+        ]) key='}' ;;
+        backslash) key='|' ;;
+        ,) key='<' ;;
+        .) key='>' ;;
+        \`) key="~" ;;
 		esac
 	fi
+
+  # Handle caps lock for letter casing
+  if [ "$caps_lock_active" -eq 1 ]; then
+    case $key in
+      [a-z]) key=$(echo "$key" | tr '[:lower:]' '[:upper:]') ;;
+    esac
+  else
+    case $key in
+      [A-Z]) key=$(echo "$key" | tr '[:upper:]' '[:lower:]') ;;
+    esac
+  fi
+
+  # If Shift isn't active, convert uppercase to lowercase
+  if [ "$shift_active" -eq 0 ] && [ "$caps_lock_active" -eq 0 ]; then
+    case $key in
+      [A-Z]) key=$(echo "$key" | tr '[:upper:]' '[:lower:]') ;;
+    esac
+  fi
 
 	if [ "$previous_key" = "Control_L" ] && [ "$key" = "Escape" ]; then
 		eww -c "$basedir/bubbles" reload
@@ -49,10 +110,11 @@ parse_keys() {
 		killall getkeys.sh
 	fi
 
-	# add letters only to the file
-	if [ ${#key} -eq 1 ]; then
-		echo -n "$key" >>"$filename"
-	fi
+
+  # Add letters only to the file
+  if [ ${#key} -eq 1 ]; then
+    echo -n "$key" >>"$filename"
+  fi
 
 	previous_key=$key
 }
